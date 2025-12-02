@@ -1,0 +1,39 @@
+
+Подготовить проект
+
+go mod init kt4
+go mod tidy 
+
+1. Подключение и подписка на канал в nats-streaming (используем JetStreaming)
+
+Скачиваем сервер обработки сообщений nats-server
+    Выбираем свою ОС lin, win, darwin
+    https://github.com/nats-io/nats-server/releases
+
+Запускаем JetStreaming
+./nats-server -js   
+
+Теперь JetStreaming слушает на порту 0.0.0.0:4222
+
+Донастраиваем JetStreaming, чтобы появились каналы и консьюмеры надо писать специальный код
+
+Пишем на го с помощью клиента:
+Устанавилваем зависимость для го
+go get github.com/nats-io/nats.go@latest
+
+Публикуем сообщение в nats JetStreaming
+
+Устанавливаем консольную утилиту работы с nats
+go install github.com/nats-io/natscli/nats@latest
+
+Публикуем неполноценные данные:
+~/go/bin/nats pub foo {\"Id\":123123} --jetstream
+
+Поднимаем postgres
+- первая настройка
+LC_ALL="C" /opt/homebrew/opt/postgresql@17/bin/initdb -D db
+- запуск сервера
+LC_ALL="C" /opt/homebrew/opt/postgresql@17/bin/postgres -D db
+
+Подключаемся к Постгрес из го
+go get "github.com/lib/pq"
